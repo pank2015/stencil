@@ -9,6 +9,7 @@ export const PANEL_GROUPS = [
   { id: 'P08', label: 'Process & Flow' },
   { id: 'P10', label: 'AI / ML & Agentic' },
   { id: 'P11', label: 'Data Engineering' },
+  { id: 'P13', label: 'Security & Identity' },
   { id: 'P12', label: 'Annotations' },
 ];
 
@@ -292,6 +293,303 @@ export const SHAPES = {
     'ent.dataeng.stream-processor', 'Stream Processor', 'P11', 'rounded',
     { border: '#00695C', fill: '#E0F7FA', text: '#1A1A1A' },
     '«stream-proc»', { width: 170, height: 80 }, '〜', 'Real-time stream processing engine'
+  ),
+
+  // ── P01 Foundation — generic geometric building blocks ──
+  'ent.foundation.triangle': S(
+    'ent.foundation.triangle', 'Triangle', 'P01', 'triangle',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 90, height: 80 }, '△', 'Generic triangle'
+  ),
+  'ent.foundation.pentagon': S(
+    'ent.foundation.pentagon', 'Pentagon', 'P01', 'pentagon',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 90, height: 80 }, '⬠', 'Generic pentagon'
+  ),
+  'ent.foundation.octagon': S(
+    'ent.foundation.octagon', 'Octagon', 'P01', 'octagon',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 90, height: 80 }, '⯃', 'Generic octagon / stop'
+  ),
+  'ent.foundation.parallelogram': S(
+    'ent.foundation.parallelogram', 'Parallelogram', 'P01', 'parallelogram',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 120, height: 60 }, '▱', 'Generic parallelogram'
+  ),
+  'ent.foundation.star': S(
+    'ent.foundation.star', 'Star', 'P01', 'star',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 80, height: 80 }, '★', 'Highlight / emphasis star'
+  ),
+  'ent.foundation.cross': S(
+    'ent.foundation.cross', 'Cross', 'P01', 'cross',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 80, height: 80 }, '✚', 'Cross / plus marker'
+  ),
+  'ent.foundation.cloud': S(
+    'ent.foundation.cloud', 'Cloud', 'P01', 'cloud',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 130, height: 80 }, '☁', 'Generic cloud'
+  ),
+  'ent.foundation.cube': S(
+    'ent.foundation.cube', 'Cube / Box', 'P01', 'cube',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 110, height: 90 }, '⬢', '3D box / artifact'
+  ),
+  'ent.foundation.chevron': S(
+    'ent.foundation.chevron', 'Chevron', 'P01', 'chevron',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 140, height: 50 }, '➤', 'Process step / chevron'
+  ),
+  'ent.foundation.arrow-right': S(
+    'ent.foundation.arrow-right', 'Arrow Right', 'P01', 'arrow-right',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 120, height: 60 }, '→', 'Block arrow right'
+  ),
+  'ent.foundation.arrow-left': S(
+    'ent.foundation.arrow-left', 'Arrow Left', 'P01', 'arrow-left',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 120, height: 60 }, '←', 'Block arrow left'
+  ),
+  'ent.foundation.arrow-up': S(
+    'ent.foundation.arrow-up', 'Arrow Up', 'P01', 'arrow-up',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 60, height: 120 }, '↑', 'Block arrow up'
+  ),
+  'ent.foundation.arrow-down': S(
+    'ent.foundation.arrow-down', 'Arrow Down', 'P01', 'arrow-down',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 60, height: 120 }, '↓', 'Block arrow down'
+  ),
+  'ent.foundation.arrow-h': S(
+    'ent.foundation.arrow-h', 'Arrow Bi-Dir', 'P01', 'arrow-h',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 140, height: 60 }, '↔', 'Bidirectional block arrow'
+  ),
+  'ent.foundation.callout': S(
+    'ent.foundation.callout', 'Callout', 'P12', 'callout',
+    { border: '#B0BEC5', fill: '#FFFDE7', text: '#1A1A1A' },
+    '', { width: 150, height: 90 }, '💬', 'Speech / callout bubble'
+  ),
+
+  // ── P03 Systems — UML structural ──
+  'ent.system.component': S(
+    'ent.system.component', 'Component', 'P03', 'component',
+    { border: '#006064', fill: '#E0F2F1', text: '#1A1A1A' },
+    '«component»', { width: 170, height: 90 }, '⬓', 'UML component / module'
+  ),
+  'ent.system.package': S(
+    'ent.system.package', 'Package', 'P03', 'folder',
+    { border: '#006064', fill: '#E0F2F1', text: '#1A1A1A' },
+    '«package»', { width: 160, height: 100 }, '🗂', 'UML package / namespace'
+  ),
+  'ent.system.node': S(
+    'ent.system.node', 'Node / Device', 'P04', 'cube',
+    { border: '#424242', fill: '#ECEFF1', text: '#1A1A1A' },
+    '«device»', { width: 150, height: 110 }, '🖳', 'UML deployment node / device'
+  ),
+  'ent.system.artifact': S(
+    'ent.system.artifact', 'Artifact', 'P03', 'document',
+    { border: '#5A6678', fill: '#F5F5F5', text: '#1A1A1A' },
+    '«artifact»', { width: 140, height: 90 }, '📄', 'Deployable artifact / file'
+  ),
+
+  // ── P04 Infrastructure — network & client devices ──
+  'ent.infra.cloud': S(
+    'ent.infra.cloud', 'Cloud / Internet', 'P04', 'cloud',
+    { border: '#1565C0', fill: '#E3F2FD', text: '#1A1A1A' },
+    '«cloud»', { width: 150, height: 90 }, '🌐', 'Internet / WAN / cloud boundary'
+  ),
+  'ent.infra.firewall': S(
+    'ent.infra.firewall', 'Firewall', 'P04', 'brick',
+    { border: '#B71C1C', fill: '#FFEBEE', text: '#1A1A1A' },
+    '«firewall»', { width: 130, height: 80 }, '🧱', 'Network firewall / checkpoint'
+  ),
+  'ent.infra.router': S(
+    'ent.infra.router', 'Router', 'P04', 'circle',
+    { border: '#424242', fill: '#ECEFF1', text: '#1A1A1A' },
+    '«router»', { width: 80, height: 80 }, '📡', 'Network router'
+  ),
+  'ent.infra.switch': S(
+    'ent.infra.switch', 'Switch', 'P04', 'rect',
+    { border: '#424242', fill: '#ECEFF1', text: '#1A1A1A' },
+    '«switch»', { width: 140, height: 50 }, '🔀', 'Network switch'
+  ),
+  'ent.infra.cdn': S(
+    'ent.infra.cdn', 'CDN', 'P04', 'hexagon',
+    { border: '#1565C0', fill: '#E3F2FD', text: '#1A1A1A' },
+    '«cdn»', { width: 130, height: 70 }, '🌍', 'Content delivery network edge'
+  ),
+  'ent.infra.dns': S(
+    'ent.infra.dns', 'DNS', 'P04', 'rounded',
+    { border: '#1565C0', fill: '#E3F2FD', text: '#1A1A1A' },
+    '«dns»', { width: 120, height: 60 }, '🧭', 'DNS / name resolution'
+  ),
+  'ent.infra.vpn-gateway': S(
+    'ent.infra.vpn-gateway', 'VPN Gateway', 'P04', 'hexagon',
+    { border: '#424242', fill: '#ECEFF1', text: '#1A1A1A' },
+    '«vpn»', { width: 140, height: 70 }, '🔐', 'VPN / secure tunnel gateway'
+  ),
+  'ent.infra.desktop': S(
+    'ent.infra.desktop', 'Desktop', 'P04', 'display',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '«client»', { width: 120, height: 90 }, '🖥', 'Desktop client workstation'
+  ),
+  'ent.infra.laptop': S(
+    'ent.infra.laptop', 'Laptop', 'P04', 'trapezoid',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '«client»', { width: 130, height: 80 }, '💻', 'Laptop client'
+  ),
+  'ent.infra.mobile': S(
+    'ent.infra.mobile', 'Mobile Device', 'P04', 'rounded',
+    { border: '#37474F', fill: '#FFFFFF', text: '#1A1A1A' },
+    '«mobile»', { width: 60, height: 110 }, '📱', 'Mobile / tablet client'
+  ),
+
+  // ── P08 Process — ANSI flowchart symbols ──
+  'ent.process.data-io': S(
+    'ent.process.data-io', 'Data (I/O)', 'P08', 'parallelogram',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 70 }, '▱', 'Input / output data'
+  ),
+  'ent.process.document': S(
+    'ent.process.document', 'Document', 'P08', 'document',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 90 }, '📃', 'Document / report output'
+  ),
+  'ent.process.multi-document': S(
+    'ent.process.multi-document', 'Multi-Document', 'P08', 'multi-document',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 90 }, '📚', 'Multiple documents'
+  ),
+  'ent.process.manual-input': S(
+    'ent.process.manual-input', 'Manual Input', 'P08', 'manual-input',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 70 }, '⌨', 'Manual data entry'
+  ),
+  'ent.process.manual-operation': S(
+    'ent.process.manual-operation', 'Manual Operation', 'P08', 'trapezoid',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 70 }, '✋', 'Manual operation step'
+  ),
+  'ent.process.display': S(
+    'ent.process.display', 'Display', 'P08', 'display',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 70 }, '📺', 'Display / output to screen'
+  ),
+  'ent.process.delay': S(
+    'ent.process.delay', 'Delay', 'P08', 'delay',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 130, height: 60 }, '⏳', 'Wait / delay step'
+  ),
+  'ent.process.predefined': S(
+    'ent.process.predefined', 'Predefined Process', 'P08', 'predefined-process',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 160, height: 70 }, '▥', 'Predefined / named sub-routine'
+  ),
+  'ent.process.stored-data': S(
+    'ent.process.stored-data', 'Stored Data', 'P08', 'stored-data',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 130, height: 80 }, '🗃', 'Stored data'
+  ),
+  'ent.process.preparation': S(
+    'ent.process.preparation', 'Preparation', 'P08', 'hexagon',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 150, height: 70 }, '⬡', 'Preparation / setup step'
+  ),
+  'ent.process.connector-on': S(
+    'ent.process.connector-on', 'On-page Connector', 'P08', 'circle',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 44, height: 44 }, '◯', 'On-page reference connector'
+  ),
+  'ent.process.connector-off': S(
+    'ent.process.connector-off', 'Off-page Connector', 'P08', 'offpage',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '', { width: 70, height: 80 }, '⬠', 'Off-page reference connector'
+  ),
+
+  // ── P08 Process — BPMN events, gateways & artifacts ──
+  'ent.bpmn.event-intermediate': S(
+    'ent.bpmn.event-intermediate', 'Intermediate Event', 'P08', 'circle',
+    { border: '#EF6C00', fill: '#FFF3E0', text: '#1A1A1A' },
+    '', { width: 48, height: 48 }, '◎', 'BPMN intermediate event'
+  ),
+  'ent.bpmn.event-message': S(
+    'ent.bpmn.event-message', 'Message Event', 'P08', 'circle',
+    { border: '#EF6C00', fill: '#FFF3E0', text: '#1A1A1A' },
+    '✉', { width: 48, height: 48 }, '✉', 'BPMN message event'
+  ),
+  'ent.bpmn.event-timer': S(
+    'ent.bpmn.event-timer', 'Timer Event', 'P08', 'circle',
+    { border: '#EF6C00', fill: '#FFF3E0', text: '#1A1A1A' },
+    '⏱', { width: 48, height: 48 }, '⏱', 'BPMN timer event'
+  ),
+  'ent.bpmn.gateway-or': S(
+    'ent.bpmn.gateway-or', 'Gateway (OR)', 'P08', 'diamond',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    'O', { width: 60, height: 60 }, '◇', 'BPMN inclusive (OR) gateway'
+  ),
+  'ent.bpmn.gateway-event': S(
+    'ent.bpmn.gateway-event', 'Gateway (Event)', 'P08', 'diamond',
+    { border: '#2E7D32', fill: '#F1F8E9', text: '#1A1A1A' },
+    '⊙', { width: 60, height: 60 }, '◇', 'BPMN event-based gateway'
+  ),
+  'ent.bpmn.data-object': S(
+    'ent.bpmn.data-object', 'Data Object', 'P08', 'document',
+    { border: '#5A6678', fill: '#FAFAFA', text: '#1A1A1A' },
+    '', { width: 90, height: 110 }, '📄', 'BPMN data object'
+  ),
+  'ent.bpmn.data-store': S(
+    'ent.bpmn.data-store', 'Data Store', 'P08', 'cylinder',
+    { border: '#5A6678', fill: '#FAFAFA', text: '#1A1A1A' },
+    '', { width: 90, height: 90 }, '🗄', 'BPMN data store'
+  ),
+  'ent.bpmn.swimlane': S(
+    'ent.bpmn.swimlane', 'Swimlane', 'P07', 'swimlane',
+    { border: '#5A6678', fill: '#FAFCFF', text: '#1A3A5C' },
+    '«lane»', { width: 600, height: 200 }, '🏊', 'BPMN swimlane (role / system)'
+  ),
+  'ent.bpmn.pool': S(
+    'ent.bpmn.pool', 'Pool', 'P07', 'pool',
+    { border: '#37474F', fill: '#FAFAFA', text: '#37474F' },
+    '«pool»', { width: 600, height: 320 }, '🟦', 'BPMN pool (participant)'
+  ),
+  'ent.bpmn.text-annotation': S(
+    'ent.bpmn.text-annotation', 'Text Annotation', 'P12', 'note',
+    { border: '#B0BEC5', fill: '#FFFFFF', text: '#1A1A1A' },
+    '', { width: 160, height: 70 }, '🗒', 'BPMN text annotation'
+  ),
+
+  // ── P13 Security & Identity ──
+  'ent.security.shield': S(
+    'ent.security.shield', 'Security Control', 'P13', 'pentagon',
+    { border: '#2E7D32', fill: '#E8F5E9', text: '#1A1A1A' },
+    '«control»', { width: 90, height: 100 }, '🛡', 'Security control / guard'
+  ),
+  'ent.security.key': S(
+    'ent.security.key', 'Secret / Key', 'P13', 'rounded',
+    { border: '#F9A825', fill: '#FFFDE7', text: '#1A1A1A' },
+    '«secret»', { width: 120, height: 60 }, '🔑', 'Secret / API key / credential'
+  ),
+  'ent.security.vault': S(
+    'ent.security.vault', 'Vault', 'P13', 'cylinder',
+    { border: '#F9A825', fill: '#FFFDE7', text: '#1A1A1A' },
+    '«vault»', { width: 90, height: 100 }, '🔒', 'Secrets vault / key store'
+  ),
+  'ent.security.certificate': S(
+    'ent.security.certificate', 'Certificate', 'P13', 'document',
+    { border: '#6A1B9A', fill: '#F3E5F5', text: '#1A1A1A' },
+    '«cert»', { width: 140, height: 90 }, '📜', 'TLS / signing certificate'
+  ),
+  'ent.security.idp': S(
+    'ent.security.idp', 'Identity Provider', 'P13', 'hexagon',
+    { border: '#6A1B9A', fill: '#F3E5F5', text: '#1A1A1A' },
+    '«idp»', { width: 160, height: 80 }, '🆔', 'IdP / IAM / SSO provider'
+  ),
+  'ent.security.lock': S(
+    'ent.security.lock', 'Lock / Policy', 'P13', 'rounded',
+    { border: '#B71C1C', fill: '#FFEBEE', text: '#1A1A1A' },
+    '«policy»', { width: 120, height: 60 }, '🔏', 'Access policy / lock'
   ),
 };
 

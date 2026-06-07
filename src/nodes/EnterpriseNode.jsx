@@ -1,12 +1,13 @@
 ﻿import { memo, useCallback } from 'react';
 import { Handle, Position, NodeResizer } from 'reactflow';
-import { SHAPES, STATUS_COLORS } from '../data/shapes';
+import { SHAPES } from '../data/shapes';
 import { ShapeRenderer } from './ShapeRenderer';
+import InlineLabelEditor from './InlineLabelEditor';
 import useDiagramStore from '../store/store';
 import './shapes.css';
 
 const EnterpriseNode = memo(({ id, data, selected, style: nodeStyle }) => {
-  const { shapeType, label, metadata } = data;
+  const { shapeType, label } = data;
   const spec = SHAPES[shapeType] || SHAPES['ent.foundation.rectangle'];
   const { defaultSize, stereotype, color } = spec;
 
@@ -23,10 +24,6 @@ const EnterpriseNode = memo(({ id, data, selected, style: nodeStyle }) => {
   const onResize = useCallback((_, { width, height }) => {
     updateNodeSize(id, Math.round(width), Math.round(height));
   }, [id, updateNodeSize]);
-
-  const statusColor   = STATUS_COLORS[metadata?.lifecycleStatus] || STATUS_COLORS.Draft;
-  const hasCompliance = metadata?.complianceFlags?.length > 0;
-  const systemCode    = metadata?.systemCode || '';
 
   return (
     <div
@@ -51,18 +48,9 @@ const EnterpriseNode = memo(({ id, data, selected, style: nodeStyle }) => {
       <div className="ent-content">
         {stereotype && <span className="ent-stereotype">{stereotype}</span>}
         <span className="ent-label">{label || spec.displayName}</span>
-        {systemCode && <span className="ent-systemcode">{systemCode}</span>}
       </div>
 
-      <div
-        className="ent-status-dot"
-        style={{ background: statusColor }}
-        title={`Status: ${metadata?.lifecycleStatus || 'Draft'}`}
-      />
-
-      {hasCompliance && (
-        <div className="ent-compliance-badge" title={`Compliance: ${metadata.complianceFlags.join(', ')}`}>warning</div>
-      )}
+      <InlineLabelEditor id={id} label={label} placeholder={spec.displayName} />
 
       {/* Cardinal — original types restored so existing edges render correctly */}
       <Handle type="target" position={Position.Top}    id="n"  style={{ left: '50%' }} />

@@ -1,17 +1,58 @@
 import { memo, useCallback } from 'react';
 import { Handle, Position, NodeResizer } from 'reactflow';
 import { SHAPES } from '../data/shapes';
+import InlineLabelEditor from './InlineLabelEditor';
 import useDiagramStore from '../store/store';
 import './shapes.css';
 
 const BoundaryNode = memo(({ id, data, selected }) => {
-  const { shapeType, label, metadata } = data;
+  const { shapeType, label } = data;
   const spec = SHAPES[shapeType] || SHAPES['ent.boundary.system'];
   const { color, stereotype } = spec;
   const isDashed = spec.shape === 'boundary-dashed';
+  const isSwimlane = spec.shape === 'swimlane';
 
   const selectNode = useDiagramStore(s => s.selectNode);
   const onClick = useCallback((e) => { e.stopPropagation(); selectNode(id); }, [id, selectNode]);
+
+  if (isSwimlane) {
+    const LANE = 30;
+    return (
+      <div className="ent-node" style={{ width: '100%', height: '100%' }} onClick={onClick}>
+        <NodeResizer
+          isVisible={selected}
+          minWidth={220}
+          minHeight={140}
+          color={color.border}
+          lineStyle={{ stroke: color.border, strokeWidth: 1 }}
+          handleStyle={{ width: 8, height: 8, borderRadius: 2, background: color.border }}
+        />
+        <div style={{ position: 'absolute', inset: 0, border: `1.5px solid ${color.border}`, borderRadius: 4, background: color.fill, pointerEvents: 'none' }} />
+        {/* Vertical lane header on the left */}
+        <div
+          style={{
+            position: 'absolute', top: 0, left: 0, bottom: 0, width: LANE,
+            background: `${color.border}18`,
+            borderRight: `1.5px solid ${color.border}`,
+            borderRadius: '4px 0 0 4px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <span style={{ transform: 'rotate(-90deg)', whiteSpace: 'nowrap', fontSize: 12, fontWeight: 700, color: color.text || '#1A1A1A' }}>
+            {label || spec.displayName}
+          </span>
+        </div>
+
+        <InlineLabelEditor id={id} label={label} placeholder={spec.displayName} align="top-left" />
+
+        <Handle type="target" position={Position.Top}    id="n"  style={{ left: '50%' }} />
+        <Handle type="source" position={Position.Bottom} id="s"  style={{ left: '50%' }} />
+        <Handle type="source" position={Position.Right}  id="e"  style={{ top: '50%' }} />
+        <Handle type="target" position={Position.Left}   id="w"  style={{ top: '50%' }} />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -63,12 +104,9 @@ const BoundaryNode = memo(({ id, data, selected }) => {
             {stereotype}
           </span>
         )}
-        {metadata?.systemCode && (
-          <span style={{ fontSize: 9, color: 'var(--text-secondary)', fontFamily: 'monospace', marginLeft: 'auto' }}>
-            {metadata.systemCode}
-          </span>
-        )}
       </div>
+
+      <InlineLabelEditor id={id} label={label} placeholder={spec.displayName} align="top-left" />
 
       <Handle type="target" position={Position.Top}    id="n"  style={{ left: '50%' }} />
       <Handle type="source" position={Position.Bottom} id="s"  style={{ left: '50%' }} />

@@ -74,6 +74,11 @@ const useDiagramStore = create(
       showLegend:    true,
       showMiniMap:   true,
       connectionType: 'conn.sync.rest',
+      legendPosition: null,   // { x, y } in canvas-wrapper px; null = default bottom-right
+
+      // Panel UI
+      leftPanelCollapsed:  false,
+      rightPanelCollapsed: false,
 
       // Stencil UI
       stencilSearch: '',
@@ -340,7 +345,7 @@ const useDiagramStore = create(
         const allShapes = { ...SHAPES, ...get().userShapes };
         const spec = allShapes[shapeType];
         if (!spec) return;
-        const isBoundary = spec.shape === 'boundary' || spec.shape === 'boundary-dashed';
+        const isBoundary = spec.shape === 'boundary' || spec.shape === 'boundary-dashed' || spec.shape === 'swimlane' || spec.shape === 'pool';
         const isPerson   = spec.shape === 'person' || spec.shape === 'org';
         const id = uid();
         const node = {
@@ -371,7 +376,7 @@ const useDiagramStore = create(
         const allShapes = { ...SHAPES, ...get().userShapes };
         const spec = allShapes[shapeType];
         if (!spec) return;
-        const isBoundary = spec.shape === 'boundary' || spec.shape === 'boundary-dashed';
+        const isBoundary = spec.shape === 'boundary' || spec.shape === 'boundary-dashed' || spec.shape === 'swimlane' || spec.shape === 'pool';
         const isPerson   = spec.shape === 'person' || spec.shape === 'org';
         set(s => ({
           nodes: s.nodes.map(n =>
@@ -499,6 +504,9 @@ const useDiagramStore = create(
       setConnectionType: (v) => set({ connectionType: v }),
       setShowLegend: (v) => set({ showLegend: v }),
       setShowMiniMap: (v) => set({ showMiniMap: v }),
+      setLegendPosition: (pos) => set({ legendPosition: pos }),
+      toggleLeftPanel:  () => set(s => ({ leftPanelCollapsed:  !s.leftPanelCollapsed })),
+      toggleRightPanel: () => set(s => ({ rightPanelCollapsed: !s.rightPanelCollapsed })),
 
       // ── Stencil ──
       setStencilSearch: (v) => set({ stencilSearch: v }),
@@ -572,6 +580,9 @@ const useDiagramStore = create(
         showLegend:       s.showLegend,
         showMiniMap:      s.showMiniMap,
         connectionType:   s.connectionType,
+        legendPosition:   s.legendPosition,
+        leftPanelCollapsed:  s.leftPanelCollapsed,
+        rightPanelCollapsed: s.rightPanelCollapsed,
         diagrams:         s.diagrams,
         currentDiagramId: s.currentDiagramId,
         currentExampleKey: s.currentExampleKey,

@@ -14,23 +14,6 @@ export default function StatusBar() {
   const selectedEdge = edges.find(e => e.id === selectedEdgeId);
   const activeConn = CONNECTORS[connectionType];
 
-  // Status counts
-  const issues = {
-    info: nodes.filter(n => n.data.metadata?.systemCode).length,
-    warnings: nodes.filter(n => !n.data.metadata?.ownerTeam || n.data.metadata?.lifecycleStatus === 'Decommission').length,
-    errors: nodes.filter(n => !n.data.metadata?.systemCode && !['person', 'boundary'].includes(n.type)).length,
-  };
-
-  const pill = (label, count, color, fill) => count === 0 ? null : (
-    <span style={{
-      display: 'flex', alignItems: 'center', gap: 3, padding: '2px 8px', borderRadius: 10,
-      fontSize: 10, fontWeight: 700, background: fill, color,
-      border: `1px solid ${color}40`,
-    }}>
-      {label} <span>{count}</span>
-    </span>
-  );
-
   return (
     <footer style={{
       height: 28, display: 'flex', alignItems: 'center',
@@ -38,30 +21,11 @@ export default function StatusBar() {
       borderTop: '1px solid rgba(255,255,255,.1)', flexShrink: 0, gap: 12,
       fontSize: 10, color: 'rgba(255,255,255,.7)',
     }}>
-      {/* Status counts */}
+      {/* Counts */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{ color: 'rgba(255,255,255,.4)' }}>ℹ Info</span>
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          width: 16, height: 16, borderRadius: '50%', background: 'rgba(255,255,255,.15)',
-          fontSize: 9, fontWeight: 700, color: 'white',
-        }}>{issues.info}</span>
-
-        <span style={{ color: 'rgba(255,255,255,.4)', marginLeft: 6 }}>⚠ Warnings</span>
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          width: 16, height: 16, borderRadius: '50%',
-          background: issues.warnings > 0 ? 'rgba(230,81,0,.6)' : 'rgba(255,255,255,.15)',
-          fontSize: 9, fontWeight: 700, color: 'white',
-        }}>{issues.warnings}</span>
-
-        <span style={{ color: 'rgba(255,255,255,.4)', marginLeft: 6 }}>✕ Missing codes</span>
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          width: 16, height: 16, borderRadius: '50%',
-          background: issues.errors > 0 ? 'rgba(183,28,28,.6)' : 'rgba(255,255,255,.15)',
-          fontSize: 9, fontWeight: 700, color: 'white',
-        }}>{issues.errors}</span>
+        <span style={{ color: 'rgba(255,255,255,.5)' }}>{nodes.length} elements</span>
+        <span style={{ color: 'rgba(255,255,255,.25)' }}>·</span>
+        <span style={{ color: 'rgba(255,255,255,.5)' }}>{edges.length} connectors</span>
       </div>
 
       <div style={{ flex: 1 }} />
@@ -71,9 +35,6 @@ export default function StatusBar() {
         <span style={{ color: 'rgba(255,255,255,.6)' }}>
           Selected: <strong style={{ color: 'white' }}>{selectedNode.data.label || 'Unnamed'}</strong>
           {' · '}{SHAPES[selectedNode.data.shapeType]?.displayName || ''}
-          {selectedNode.data.metadata?.lifecycleStatus && (
-            <> · <span style={{ color: '#80DEEA' }}>{selectedNode.data.metadata.lifecycleStatus}</span></>
-          )}
         </span>
       )}
       {selectedEdge && (

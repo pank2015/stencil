@@ -1,7 +1,7 @@
 ﻿import { useCallback, useRef, useState } from 'react';
 import ReactFlow, {
   Background, Controls, MiniMap, useReactFlow,
-  BackgroundVariant, Panel, ConnectionMode,
+  BackgroundVariant, ConnectionMode,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -128,10 +128,10 @@ function CanvasInner() {
             maskColor="rgba(200,212,224,0.4)"
           />
         )}
-        <Panel position="bottom-right" style={{ margin: '0 0 36px 0', pointerEvents: 'none' }}>
-          <Legend />
-        </Panel>
       </ReactFlow>
+
+      {/* Legend — absolutely positioned in the wrapper so it can be dragged freely */}
+      <Legend />
 
       {/* Context menu — rendered inside canvas wrapper so position: absolute works */}
       <ContextMenu menu={menu} onClose={() => setMenu(null)} />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SHAPES, SHAPES_LIST, STATUS_COLORS } from '../data/shapes';
+import { SHAPES, SHAPES_LIST } from '../data/shapes';
 import { CONNECTORS, CONNECTORS_LIST } from '../data/connectors';
 import { METADATA_SCHEMA, METADATA_GROUPS } from '../data/metadataSchema';
 import useDiagramStore from '../store/store';
@@ -215,12 +215,10 @@ function NodeProperties({ node }) {
   const updateMeta = useDiagramStore(s => s.updateNodeMetadata);
   const updateShapeType = useDiagramStore(s => s.updateNodeShapeType);
   const deleteNode = useDiagramStore(s => s.deleteNode);
-  const [openGroups, setOpenGroups] = useState(new Set(['governance']));
+  const [openGroups, setOpenGroups] = useState(new Set(['technical']));
 
   const spec = SHAPES[node.data.shapeType] || SHAPES['ent.foundation.rectangle'];
   const meta = node.data.metadata || {};
-  const status = meta.lifecycleStatus || 'Draft';
-  const statusColor = STATUS_COLORS[status] || '#ccc';
 
   const toggleGroup = (id) => setOpenGroups(prev => {
     const next = new Set(prev);
@@ -251,13 +249,6 @@ function NodeProperties({ node }) {
           style={inputStyle}
           placeholder="Element label..."
         />
-      </div>
-
-      {/* Status badge */}
-      <div style={{ padding: '8px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 10, height: 10, borderRadius: '50%', background: statusColor, flexShrink: 0 }} />
-        <span style={{ fontSize: 11, color: 'var(--text-secondary)', flex: 1 }}>{status}</span>
-        <span style={{ fontSize: 9, color: 'var(--text-muted)', fontStyle: 'italic' }}>{spec.stereotype || spec.displayName}</span>
       </div>
 
       {/* Size controls */}
@@ -403,15 +394,37 @@ export default function PropertiesPanel() {
   const edges = useDiagramStore(s => s.edges);
   const diagramName = useDiagramStore(s => s.diagramName);
   const diagramType = useDiagramStore(s => s.diagramType);
-  const effectiveDate = useDiagramStore(s => s.effectiveDate);
-  const changeInitiative = useDiagramStore(s => s.changeInitiative);
   const setDiagramName = useDiagramStore(s => s.setDiagramName);
   const setDiagramType = useDiagramStore(s => s.setDiagramType);
-  const setEffectiveDate = useDiagramStore(s => s.setEffectiveDate);
-  const setChangeInitiative = useDiagramStore(s => s.setChangeInitiative);
+  const collapsed = useDiagramStore(s => s.rightPanelCollapsed);
+  const toggleCollapsed = useDiagramStore(s => s.toggleRightPanel);
 
   const selectedNode = nodes.find(n => n.id === selectedNodeId);
   const selectedEdge = edges.find(e => e.id === selectedEdgeId);
+
+  if (collapsed) {
+    return (
+      <aside style={{
+        width: 30, flexShrink: 0, borderLeft: '1px solid var(--border)',
+        background: 'var(--surface)', display: 'flex', flexDirection: 'column', alignItems: 'center',
+        paddingTop: 8, gap: 10,
+      }}>
+        <button
+          onClick={toggleCollapsed}
+          title="Expand properties panel"
+          style={{
+            width: 22, height: 22, borderRadius: 4, border: '1px solid var(--border)',
+            background: 'white', cursor: 'pointer', color: 'var(--brand-primary)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12,
+          }}
+        >«</button>
+        <span style={{
+          writingMode: 'vertical-rl', fontSize: 10, fontWeight: 700, letterSpacing: '.5px',
+          color: 'var(--brand-primary)', textTransform: 'uppercase', marginTop: 4,
+        }}>Properties</span>
+      </aside>
+    );
+  }
 
   return (
     <aside style={{
@@ -419,10 +432,14 @@ export default function PropertiesPanel() {
       background: 'var(--surface)', display: 'flex', flexDirection: 'column', overflow: 'hidden',
     }}>
       {/* Header */}
-      <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid var(--border)' }}>
+      <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--brand-primary)', textTransform: 'uppercase', letterSpacing: '.6px' }}>
           Properties
         </div>
+        <button onClick={toggleCollapsed} title="Collapse panel" style={{
+          fontSize: 12, cursor: 'pointer', borderRadius: 4, lineHeight: 1,
+          border: '1px solid var(--border)', background: 'white', color: 'var(--brand-primary)', padding: '2px 6px',
+        }}>»</button>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto' }}>
@@ -434,7 +451,7 @@ export default function PropertiesPanel() {
           /* Diagram-level properties */
           <div>
             <div style={{ padding: '8px 14px', borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.4px' }}>📋 Artifact Details</div>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.4px' }}>Diagram</div>
             </div>
 
             <div style={{ padding: '10px 14px' }}>
@@ -442,7 +459,7 @@ export default function PropertiesPanel() {
                 <label style={labelStyle}>Diagram Name</label>
                 <input value={diagramName} onChange={e => setDiagramName(e.target.value)} style={inputStyle} />
               </div>
-              <div style={{ marginBottom: 10 }}>
+              <div style={{ marginBottom: 0 }}>
                 <label style={labelStyle}>Diagram Type</label>
                 <select value={diagramType} onChange={e => setDiagramType(e.target.value)} style={inputStyle}>
                   {['C1 System Context', 'C2 Container', 'C3 Component', 'High-Level Architecture', 'High-Level Functional', 'Deployment', 'Sequence', 'Process / Flow', 'ERD / Data Model', 'UML Class', 'UML Use Case', 'UML State Machine', 'UML Activity', 'AI/ML Pipeline', 'Agentic Workflow'].map(t => (
@@ -450,34 +467,13 @@ export default function PropertiesPanel() {
                   ))}
                 </select>
               </div>
-              <div style={{ marginBottom: 10 }}>
-                <label style={labelStyle}>Effective Date</label>
-                <input type="date" value={effectiveDate} onChange={e => setEffectiveDate(e.target.value)} style={inputStyle} />
-              </div>
-              <div style={{ marginBottom: 10 }}>
-                <label style={labelStyle}>Change Initiative</label>
-                <input value={changeInitiative} onChange={e => setChangeInitiative(e.target.value)} style={inputStyle} placeholder="e.g. New SEAL Approval" />
-                {changeInitiative && (
-                  <div style={{ marginTop: 4 }}>
-                    <span style={{
-                      display: 'inline-block', padding: '3px 10px', fontSize: 10, fontWeight: 700, borderRadius: 10,
-                      background: 'var(--brand-primary)', color: 'white',
-                    }}>
-                      {changeInitiative}
-                    </span>
-                  </div>
-                )}
-              </div>
             </div>
 
             <div style={{ padding: '8px 14px', borderTop: '1px solid var(--border)', background: 'var(--surface-2)' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: 6 }}>📊 Diagram Stats</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
                 {[
-                  ['Nodes', nodes.length],
+                  ['Elements', nodes.length],
                   ['Connectors', edges.length],
-                  ['Shapes with PII', nodes.filter(n => n.data.metadata?.complianceFlags?.includes('PII')).length],
-                  ['Draft items', nodes.filter(n => n.data.metadata?.lifecycleStatus === 'Draft').length],
                 ].map(([label, count]) => (
                   <div key={label} style={{ background: 'white', borderRadius: 6, padding: '6px 8px', border: '1px solid var(--border)' }}>
                     <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--brand-primary)' }}>{count}</div>
@@ -489,7 +485,7 @@ export default function PropertiesPanel() {
 
             <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)' }}>
               <div style={{ fontSize: 9, color: 'var(--text-muted)', textAlign: 'center', lineHeight: 1.6 }}>
-                Click a shape or connector on the canvas to edit its properties.
+                Click a shape or connector to edit it. Double-click a shape to rename it.
               </div>
             </div>
           </div>

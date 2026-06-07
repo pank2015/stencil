@@ -98,7 +98,7 @@ function insertWaypoint(waypoints, newPt, sx, sy, tx, ty) {
 }
 
 // ── Draggable edge label ──────────────────────────────────────────────────────
-function DraggableLabel({ id, label, labelX, labelY, labelOffset, selected, onSelectEdge }) {
+function DraggableLabel({ id, label, labelX, labelY, labelOffset, selected, onSelectEdge, onStartEdit }) {
   const { screenToFlowPosition } = useReactFlow();
   const updateEdge = useDiagramStore(s => s.updateEdge);
   const [dragging, setDragging] = useState(false);
@@ -146,7 +146,8 @@ function DraggableLabel({ id, label, labelX, labelY, labelOffset, selected, onSe
       }}
       onMouseDown={onMouseDown}
       onClick={(e) => { e.stopPropagation(); onSelectEdge(); }}
-      title="Drag to reposition label"
+      onDoubleClick={(e) => { e.stopPropagation(); e.preventDefault(); onStartEdit?.(); }}
+      title="Drag to reposition · double-click to edit"
     >
       {label.length > 30 ? label.slice(0, 28) + '…' : label}
     </div>
@@ -217,6 +218,10 @@ const EnterpriseEdge = memo(({
   const globalRouting  = useDiagramStore(s => s.routingStyle);
   const selectEdge     = useDiagramStore(s => s.selectEdge);
   const updateWPs      = useDiagramStore(s => s.updateEdgeWaypoints);
+  const updateEdge     = useDiagramStore(s => s.updateEdge);
+
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft]     = useState('');
 
   // Per-edge routing overrides global
   const routingStyle = data?.routingStyle || globalRouting;
@@ -258,15 +263,19 @@ const EnterpriseEdge = memo(({
 
   const allPts = selected ? [{ x: sourceX, y: sourceY }, ...waypoints, { x: targetX, y: targetY }] : [];
 
+  const startEdit = useCallback(() => { setDraft(data?.label || ''); setEditing(true); }, [data]);
+  const commitEdit = useCallback(() => { updateEdge(id, 'label', draft); setEditing(false); }, [id, draft, updateEdge]);
+
   return (
     <>
       <path d={edgePath} fill="none" stroke="transparent" strokeWidth={14} style={{ cursor: 'pointer' }}
-        onClick={(e) => { e.stopPropagation(); selectEdge(id); }} />
+        onClick={(e) => { e.stopPropagation(); selectEdge(id); }}
+        onDoubleClick={(e) => { e.stopPropagation(); e.preventDefault(); selectEdge(id); startEdit(); }} />
       <BaseEdge id={id} path={edgePath} style={edgeStyle} markerEnd={markerEnd} markerStart={markerStart} />
 
-      {(label || selected) && (
+      {(label || selected || editing) && (
         <EdgeLabelRenderer>
-          {label && (
+          {label && !editing && (
             <DraggableLabel
               id={id}
               label={label}
@@ -275,7 +284,41 @@ const EnterpriseEdge = memo(({
               labelOffset={labelOffset}
               selected={selected}
               onSelectEdge={() => selectEdge(id)}
+              onStartEdit={startEdit}
             />
+          )}
+
+          {editing && (
+            <div
+              className="nodrag nopan"
+              style={{
+                position: 'absolute', zIndex: 1001, pointerEvents: 'all',
+                transform: `translate(-50%,-50%) translate(${labelX + labelOffset.x}px,${labelY + labelOffset.y}px)`,
+              }}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <textarea
+                autoFocus
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitEdit(); }
+                  else if (e.key === 'Escape') { e.preventDefault(); setEditing(false); }
+                }}
+                onBlur={commitEdit}
+                rows={1}
+                placeholder={spec.labelHint || 'label…'}
+                style={{
+                  minWidth: 70, resize: 'none', textAlign: 'center',
+                  fontSize: 11, fontWeight: 600, color: '#1A1A1A',
+                  border: '1px solid var(--brand-secondary)', borderRadius: 4,
+                  padding: '2px 5px', outline: 'none', background: 'white',
+                  fontFamily: 'inherit', lineHeight: 1.25,
+                  boxShadow: '0 1px 6px rgba(0,0,0,.18)',
+                }}
+              />
+            </div>
           )}
 
           {selected && waypoints.map((pt, i) => (

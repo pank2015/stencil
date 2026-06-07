@@ -1,15 +1,15 @@
 import { memo, useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
-import { SHAPES, STATUS_COLORS } from '../data/shapes';
+import { SHAPES } from '../data/shapes';
+import InlineLabelEditor from './InlineLabelEditor';
 import useDiagramStore from '../store/store';
 import './shapes.css';
 
 const PersonNode = memo(({ id, data, selected }) => {
-  const { shapeType, label, metadata } = data;
+  const { shapeType, label } = data;
   const spec = SHAPES[shapeType] || SHAPES['ent.people.person'];
   const { color, stereotype } = spec;
   const isOrg = spec.shape === 'org';
-  const statusColor = STATUS_COLORS[metadata?.lifecycleStatus] || STATUS_COLORS.Draft;
 
   const selectNode = useDiagramStore(s => s.selectNode);
   const onClick = useCallback((e) => { e.stopPropagation(); selectNode(id); }, [id, selectNode]);
@@ -56,14 +56,14 @@ const PersonNode = memo(({ id, data, selected }) => {
           </>
         )}
 
-        {/* Status dot */}
-        <circle cx={52} cy={6} r={4} fill={statusColor} stroke="white" strokeWidth={1.5} />
       </svg>
 
       <div style={{ textAlign: 'center', maxWidth: 90 }}>
         <div className="person-label">{label || spec.displayName}</div>
         {stereotype && <div className="person-stereotype">{stereotype}</div>}
       </div>
+
+      <InlineLabelEditor id={id} label={label} placeholder={spec.displayName} />
 
       <Handle type="target" position={Position.Top}    id="n"  style={{ left: '50%', top: 14 }} />
       <Handle type="source" position={Position.Bottom} id="s"  style={{ left: '50%' }} />

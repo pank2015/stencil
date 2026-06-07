@@ -1,6 +1,7 @@
 ﻿import { useState, useMemo } from 'react';
 import { SHAPES_BY_PANEL, PANEL_GROUPS, SHAPES_LIST, SHAPES } from '../data/shapes';
 import { CONNECTORS_LIST, CONNECTOR_GROUPS } from '../data/connectors';
+import { ShapeRenderer } from '../nodes/ShapeRenderer';
 import useDiagramStore from '../store/store';
 import ShapeEditor from './ShapeEditor';
 
@@ -22,9 +23,14 @@ function Arrow({ open, color }) {
   );
 }
 
+// Fixed thumbnail box; the actual shape is rendered proportionally inside it.
+const THUMB_W = 46;
+const THUMB_H = 32;
+
 function ShapePreview({ spec }) {
   const { shape, color } = spec;
-  const s = { border: `1.5px solid ${color.border}`, background: color.fill };
+
+  // ── Shapes ShapeRenderer does not draw (handled by dedicated node components) ──
   if (shape === 'person' || shape === 'org') return (
     <svg width={22} height={30} viewBox="0 0 22 30">
       <circle cx={11} cy={7} r={5} fill={color.fill} stroke={color.border} strokeWidth={1.5} />
@@ -34,40 +40,6 @@ function ShapePreview({ spec }) {
       <line x1={18} y1={16} x2={20} y2={26} stroke={color.border} strokeWidth={1.5} />
     </svg>
   );
-  if (shape === 'cylinder' || shape === 'cylinder-wide') return (
-    <svg width={26} height={30} viewBox="0 0 26 30">
-      <ellipse cx={13} cy={6} rx={11} ry={4} fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-      <rect x={2} y={6} width={22} height={18} fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-      <ellipse cx={13} cy={24} rx={11} ry={4} fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-    </svg>
-  );
-  if (shape === 'hexagon') return (
-    <svg width={30} height={26} viewBox="0 0 30 26">
-      <polygon points="7,1 23,1 29,13 23,25 7,25 1,13" fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-    </svg>
-  );
-  if (shape === 'diamond') return (
-    <svg width={30} height={22} viewBox="0 0 30 22">
-      <polygon points="15,1 29,11 15,21 1,11" fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-    </svg>
-  );
-  if (shape === 'circle' || shape === 'circle-thick') return (
-    <div style={{ ...s, width: 24, height: 24, borderRadius: '50%', borderWidth: shape === 'circle-thick' ? 3 : 1.5, borderStyle: 'solid' }} />
-  );
-  if (shape === 'ellipse') return (
-    <div style={{ ...s, width: 36, height: 22, borderRadius: '50%', borderStyle: 'solid' }} />
-  );
-  if (shape === 'note') return (
-    <svg width={28} height={24} viewBox="0 0 28 24">
-      <path d="M1,1 L21,1 L27,7 L27,23 L1,23 Z" fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-      <path d="M21,1 L21,7 L27,7" fill="none" stroke={color.border} strokeWidth={1.5} />
-    </svg>
-  );
-  if (shape === 'parallelogram') return (
-    <svg width={34} height={20} viewBox="0 0 34 20">
-      <polygon points="5,1 33,1 29,19 1,19" fill={color.fill} stroke={color.border} strokeWidth={1.5} />
-    </svg>
-  );
   if (shape === 'boundary' || shape === 'boundary-dashed') return (
     <svg width={34} height={24} viewBox="0 0 34 24">
       <rect x={1} y={1} width={32} height={22} fill={color.fill} stroke={color.border} strokeWidth={1.5}
@@ -75,11 +47,33 @@ function ShapePreview({ spec }) {
       <rect x={1} y={1} width={32} height={7} fill={`${color.border}25`} rx={2} />
     </svg>
   );
-  if (shape === 'rounded' || shape === 'rounded-dashed') return (
-    <div style={{ ...s, width: 44, height: 26, borderRadius: 6, borderStyle: shape === 'rounded-dashed' ? 'dashed' : 'solid' }} />
+  if (shape === 'swimlane') return (
+    <svg width={34} height={24} viewBox="0 0 34 24">
+      <rect x={1} y={1} width={32} height={22} fill={color.fill} stroke={color.border} strokeWidth={1.5} rx={2} />
+      <rect x={1} y={1} width={8} height={22} fill={`${color.border}25`} />
+    </svg>
   );
-  if (shape === 'rect-dashed') return <div style={{ ...s, width: 44, height: 26, borderStyle: 'dashed' }} />;
-  return <div style={{ ...s, width: 44, height: 26, borderStyle: 'solid' }} />;
+  if (shape === 'pool') return (
+    <svg width={34} height={24} viewBox="0 0 34 24">
+      <rect x={1} y={1} width={32} height={22} fill={color.fill} stroke={color.border} strokeWidth={1.5} rx={2} />
+      <rect x={1} y={1} width={32} height={7} fill={`${color.border}25`} />
+    </svg>
+  );
+
+  // ── Everything else: render the real geometry, proportional to its default size ──
+  const ar = (spec.defaultSize?.width || 120) / (spec.defaultSize?.height || 60);
+  let w = THUMB_W, h = THUMB_W / ar;
+  if (h > THUMB_H) { h = THUMB_H; w = THUMB_H * ar; }
+  w = Math.max(12, Math.round(w));
+  h = Math.max(12, Math.round(h));
+
+  return (
+    <div style={{ width: THUMB_W, height: THUMB_H, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: w, height: h }}>
+        <ShapeRenderer spec={spec} selected={false} w={w} h={h} />
+      </div>
+    </div>
+  );
 }
 
 function ShapeItem({ spec }) {
@@ -250,6 +244,8 @@ export default function StencilPanel() {
   const diagramName = useDiagramStore(s => s.diagramName);
   const diagramType = useDiagramStore(s => s.diagramType);
   const routingStyle = useDiagramStore(s => s.routingStyle);
+  const collapsed = useDiagramStore(s => s.leftPanelCollapsed);
+  const toggleCollapsed = useDiagramStore(s => s.toggleLeftPanel);
 
   const [tab, setTab] = useState('examples');
   const [openPanels, setOpenPanels] = useState(new Set(['P02', 'P03', 'P05']));
@@ -266,6 +262,31 @@ export default function StencilPanel() {
     const hasCustom = Object.values(userShapes).some(s => !SHAPES[s.id]);
     return hasCustom ? [...PANEL_GROUPS, { id: 'P09', label: 'Custom Shapes' }] : PANEL_GROUPS;
   }, [userShapes]);
+
+  // Collapsed rail
+  if (collapsed) {
+    return (
+      <aside style={{
+        width: 30, flexShrink: 0, borderRight: '1px solid var(--border)',
+        background: 'var(--surface)', display: 'flex', flexDirection: 'column', alignItems: 'center',
+        paddingTop: 8, gap: 10,
+      }}>
+        <button
+          onClick={toggleCollapsed}
+          title="Expand stencil panel"
+          style={{
+            width: 22, height: 22, borderRadius: 4, border: '1px solid var(--border)',
+            background: 'white', cursor: 'pointer', color: 'var(--brand-primary)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12,
+          }}
+        >»</button>
+        <span style={{
+          writingMode: 'vertical-rl', fontSize: 10, fontWeight: 700, letterSpacing: '.5px',
+          color: 'var(--brand-primary)', textTransform: 'uppercase', marginTop: 4,
+        }}>Stencil</span>
+      </aside>
+    );
+  }
 
   const shapesForPanel = (panelId) => {
     if (panelId === 'P09') {
@@ -324,6 +345,10 @@ export default function StencilPanel() {
             fontSize: 9, fontWeight: 600, cursor: 'pointer', borderRadius: 4,
             border: '1px solid var(--border)', background: 'white', color: '#5A6678', padding: '2px 7px',
           }}>Edit shapes</button>
+          <button onClick={toggleCollapsed} title="Collapse panel" style={{
+            fontSize: 12, cursor: 'pointer', borderRadius: 4, lineHeight: 1,
+            border: '1px solid var(--border)', background: 'white', color: 'var(--brand-primary)', padding: '2px 6px',
+          }}>«</button>
         </div>
         <div style={{ position: 'relative', marginBottom: 7 }}>
           <input
