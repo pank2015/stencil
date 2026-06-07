@@ -1,0 +1,92 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand-primary: #1A3A5C;
+  --brand-secondary: #0E7A8A;
+  --brand-neutral: #5A6678;
+  --status-new: #1B5E20;
+  --status-new-fill: #E8F5E9;
+  --status-partial: #E65100;
+  --status-partial-fill: #FFF3E0;
+  --status-decommission: #B71C1C;
+  --status-decommission-fill: #FFEBEE;
+  --status-draft: #4A148C;
+  --status-draft-fill: #F3E5F5;
+  --status-stable: #1A3A5C;
+  --status-stable-fill: #E3EAF3;
+  --arch-microservice: #006064;
+  --arch-monolith: #37474F;
+  --arch-external: #5D4037;
+  --arch-data: #1565C0;
+  --arch-aiml: #6A1B9A;
+  --arch-workflow: #2E7D32;
+  --arch-infra: #424242;
+  --arch-integration: #00695C;
+  --boundary-system: #90A4AE;
+  --boundary-fill: #F5F7F9;
+  --conn-sync: #212121;
+  --conn-async: #0E7A8A;
+  --conn-data: #1565C0;
+  --conn-control: #424242;
+  --conn-uml: #37474F;
+  --conn-aiml: #6A1B9A;
+  --surface: #ffffff;
+  --surface-2: #F8F9FA;
+  --surface-3: #ECEFF1;
+  --border: #DEE2E6;
+  --border-strong: #B0BEC5;
+  --text-primary: #1A1A1A;
+  --text-secondary: #5A6678;
+  --text-muted: #90A4AE;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.10);
+  --shadow-md: 0 2px 8px rgba(0,0,0,.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+body { background: var(--surface-2); overflow: hidden; height: 100vh; }
+#root { height: 100vh; display: flex; flex-direction: column; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+/* React Flow overrides */
+.react-flow__handle {
+  width: 8px; height: 8px;
+  background: var(--brand-secondary);
+  border: 2px solid white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.react-flow__node:hover .react-flow__handle,
+.react-flow__node.selected .react-flow__handle { opacity: 1; }
+.react-flow__handle:hover { opacity: 1 !important; transform: scale(1.3); }
+
+.react-flow__edge-path { cursor: pointer; }
+.react-flow__edge.selected .react-flow__edge-path { stroke-width: 3 !important; }
+
+.react-flow__background { background: var(--surface-2); }
+
+.edge-label-wrapper {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  pointer-events: all;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+}
+.edge-label-wrapper:hover { border-color: var(--brand-secondary); color: var(--brand-secondary); }

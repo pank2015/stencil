@@ -1,0 +1,145 @@
+/* ── Enterprise Node wrapper ── */
+.ent-node {
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  cursor: default;
+  user-select: none;
+}
+
+.ent-node.selected > .ent-shape-wrap {
+  filter: drop-shadow(0 0 0 2.5px var(--brand-secondary));
+  outline: none;
+}
+.ent-node.selected > .ent-shape-wrap rect,
+.ent-node.selected > .ent-shape-wrap ellipse,
+.ent-node.selected > .ent-shape-wrap polygon,
+.ent-node.selected > .ent-shape-wrap path {
+  stroke-width: 3;
+}
+
+/* ── Shape wrap (the SVG) ── */
+.ent-shape-wrap {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.ent-shape-wrap svg { width: 100%; height: 100%; overflow: visible; }
+
+/* ── Content overlay ── */
+.ent-content {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 6px 10px;
+  text-align: center;
+  pointer-events: none;
+  gap: 2px;
+}
+
+.ent-stereotype {
+  font-size: 9px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1;
+}
+
+.ent-icon {
+  font-size: 16px;
+  line-height: 1;
+  margin-bottom: 1px;
+}
+
+.ent-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1A1A;
+  line-height: 1.2;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.ent-systemcode {
+  font-size: 9px;
+  color: var(--text-secondary);
+  font-family: monospace;
+  margin-top: 1px;
+  line-height: 1;
+}
+
+/* ── Status dot ── */
+.ent-status-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid white;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.15);
+}
+
+/* ── Compliance badge ── */
+.ent-compliance-badge {
+  position: absolute;
+  bottom: 4px; right: 5px;
+  font-size: 10px;
+  color: var(--status-partial);
+  line-height: 1;
+}
+
+/* ── Info button ── */
+.ent-info-btn {
+  position: absolute;
+  top: 3px; right: 18px;
+  font-size: 10px;
+  color: var(--text-muted);
+  cursor: pointer;
+  pointer-events: all;
+  border: none; background: none; padding: 0;
+  line-height: 1;
+}
+.ent-info-btn:hover { color: var(--brand-secondary); }
+
+/* ── Boundary Node ── */
+.boundary-node {
+  width: 100%; height: 100%;
+  position: relative;
+  pointer-events: all;
+}
+
+.boundary-header {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 28px;
+  display: flex; align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  border-bottom: 1px solid currentColor;
+  pointer-events: none;
+}
+
+.boundary-header .boundary-stereotype {
+  font-size: 9px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+
+/* ── Person Node ── */
+.person-node {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px;
+  pointer-events: all;
+}
+
+.person-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1A1A;
+  text-align: center;
+  word-break: break-word;
+  max-width: 90px;
+}
+
+.person-stereotype {
+  font-size: 9px; color: var(--text-secondary); font-style: italic;
+}
